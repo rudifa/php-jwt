@@ -1,77 +1,23 @@
 <?php
 
-namespace drmonkeyninja;
+namespace Firebase\JWT;
 
+/**
+ * Class AppleJWT
+ * @package Firebase\JWT
+ */
 class AppleJWT
 {
-
     // string received over the wire
-    public $signedPayloadDict;
+    private $signedPayloadDict;
 
-    // the value of the signedPayload key
-    public $signedPayload;
+    // intermediate result 
+    private $signedTransactionInfo1_stdClass;
 
-    // the 3 parts of the signedPayload
-    public $signedPayloadParts;
-
-    public $signedPayload_header;
-    public $signedPayload_payload;
-    public $signedPayload_signature_provided;
-
-    // the header of the signedPayload
-    public $signedPayload_header_alg;
-    public $signedPayload_header_x5c;
-
-    // the x5c array of the header: 3 parts
-    public $signedPayload_header_x5c_header;
-    public $signedPayload_header_x5c_payload;
-    public $signedPayload_header_x5c_signature_provided;
-
-    // the 3 parts of header xc5 decoded
-    public $signedPayload_header_x5c_header_0;
-    public $signedPayload_header_x5c_header_1;
-    public $signedPayload_header_x5c_header_2;
-
-    // the first 3 values in signedPayload_payload
-    public $signedPayload_payload_notificationType;
-    public $signedPayload_payload_subtype;
-    public $signedPayload_payload_notificationUUID;
-    public $signedPayload_payload_data;
-    public $signedPayload_payload_version;
-    public $signedPayload_payload_signedDate;
-
-    // items from $signedPayload_payload_data;
-    public $signedPayload_payload_data_bundleId;
-    public $signedPayload_payload_data_bundleVersion;
-    public $signedPayload_payload_data_environment;
-    public $signedPayload_payload_data_signedTransactionInfo; // is a signed string 
-
-    public $signedPayload_payload_data_signedTransactionInfo_parts; // is an array of 3 parts
-
-    public $signedPayload_payload_data_signedTransactionInfo_part_1; // part  of interest
-
-    // 14 extracted items
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_transactionId;
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_originalTransactionId;
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_webOrderLineItemId;
-
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_bundleId;
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_productId;
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_subscriptionGroupIdentifier;
-
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_purchaseDate;
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_originalPurchaseDate;
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_expiresDate;
-
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_quantity;
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_type;
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_inAppOwnershipType;
-
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_signedDate;
-    public $signedPayload_payload_data_signedTransactionInfo_part_1_environment;
-
-
-
+    // results of conversion 
+    private $signedTransactionInfo1_object_vars;
+    private $signedTransactionInfo1_object_keys;
+    private $signedTransactionInfo1_object_values;
 
     public function __construct(string $signedPayloadDict)
     {
@@ -79,51 +25,66 @@ class AppleJWT
         // 1. initialize the signedPayloadDict property from the constructor argument
         $this->signedPayloadDict = $signedPayloadDict;
 
-
         $key = "c025e2a7b5aa4f12a8b7ec51acdbbd08";
-        // $key = "";
-        $payload1 = JWT::decode($appleJWT, new Key($key, 'ES256'));
 
-        $payload1 = json_encode($payload1);
+        // 2. decode the signedPayloadDict property
+        $payload1 = json_encode(JWT::decode($this->signedPayloadDict, new Key($key, 'ES256')));
 
-        //{"notificationType":"EXPIRED","subtype":"VOLUNTARY","notificationUUID":"1a9c67f6-d351-46e5-a1c1-c660415f4b09",
-
-        $notificationType = json_decode($payload1)->notificationType;
-
-        $subtype = json_decode($payload1)->subtype ?? "NO_SUBTYPE";
-
-        $notificationUUID = json_decode($payload1)->notificationUUID;
-
-
-        //"data":{"bundleId":"com.share-telematics.StickQueue1","bundleVersion":"1","environment":"Sandbox","signedTransactionInfo":
+        // 3. extract the data property from the decoded signedPayloadDict
         $data = json_encode(json_decode($payload1)->data);
 
-        //"version":"2.0","signedDate":1674061904484}
-
-        $version = json_decode($payload1)->version;
-
-        $signedDate = json_decode($payload1)->signedDate;
-
-        // elements from data
-
-        $bundleId = json_decode($data)->bundleId;
-
-        $bundleVersion = json_decode($data)->bundleVersion;
-
-        $environment = json_decode($data)->environment;
-
+        // 4. extract the signedTransactionInfo property from the decoded data
         $signedTransactionInfo = json_decode($data)->signedTransactionInfo;
 
+        // 5. decode the signedTransactionInfo property
         $signedTransactionInfo1_stdClass = JWT::decode($signedTransactionInfo, new Key($key, 'ES256'));
 
-        $signedTransactionInfo1_string = json_encode($signedTransactionInfo1_stdClass);
+        // 6. initialize the signedTransactionInfo1_stdClass property and its derived properties
 
-        // ---- appleJWT data signedTransactionInfo1= {"transactionId":"2000000253271855","originalTransactionId":"1000000636285238","webOrderLineItemId":"2000000019030938","bundleId":"com.share-telematics.StickPlan1","productId":"SPLPS_GADZARTS","subscriptionGroupIdentifier":"20605699","purchaseDate":1674061594000,"originalPurchaseDate":1583681241000,"expiresDate":1674061894000,"quantity":1,"type":"Auto-Renewable Subscription","inAppOwnershipType":"PURCHASED","signedDate":1674061904491,"environment":"Sandbox"}
+        $this->signedTransactionInfo1_stdClass = $signedTransactionInfo1_stdClass;
 
-        // NOTE:
-        // $json_object = json_decode($json_string); // stdClass
-        // $object_vars = get_object_vars($json_object); // associative array of <n> kv pairs
+        $this->signedTransactionInfo1_object_vars = get_object_vars($signedTransactionInfo1_stdClass);
 
-        $signedTransactionInfo1_object_vars = get_object_vars($signedTransactionInfo1_stdClass);
+        $this->signedTransactionInfo1_object_keys = array_keys($this->signedTransactionInfo1_object_vars);
+
+        $this->signedTransactionInfo1_object_values = array_values($this->signedTransactionInfo1_object_vars);
+    }
+
+    // the API methods
+
+    public function getSignedTransactionInfoVars_string()
+    {
+        return self::toString($this->signedTransactionInfo1_object_vars);
+    }
+
+    public function getSignedTransactionInfoKeys_string()
+    {
+        return self::toString($this->signedTransactionInfo1_object_keys);
+    }
+
+    public function getSignedTransactionInfoValues_string()
+    {
+        return self::toString($this->signedTransactionInfo1_object_values);
+    }
+
+    // the utility methods
+
+    static function toString($var): string
+    {
+        if (is_object($var)) {
+            $assocArray = get_object_vars($var);
+            return Utils::toString($assocArray);
+        } else if (is_array($var)) {
+            if (array_keys($var) !== range(0, count($var) - 1)) {
+                $string_array = array_map(function ($key, $value) {
+                    return "$key => $value";
+                }, array_keys($var), $var);
+                return '[' . join(', ', $string_array) . ']';
+            } else {
+                return '[' . join(', ', $var) . ']';
+            }
+        } else {
+            return (string) $var;
+        }
     }
 }

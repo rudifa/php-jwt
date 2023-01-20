@@ -22,7 +22,10 @@ class Utils
 
     public static function toString($var): string
     {
-        if (is_array($var)) {
+        if (is_object($var)) {
+            $assocArray = get_object_vars($var);
+            return Utils::toString($assocArray);
+        } else if (is_array($var)) {
             if (array_keys($var) !== range(0, count($var) - 1)) {
                 $string_array = array_map(function ($key, $value) {
                     return "$key => $value";

@@ -3,6 +3,7 @@
 // namespace Firebase\JWT;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Firebase\JWT\AppleJWT;
 
 // use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -15,12 +16,12 @@ include 'Utils.php';
 class AppleJWTTest extends TestCase
 {
 
-    public function test_2x2()
+    public function x_test_2x2()
     {
         $this->assertEquals(4, 2 * 2);
     }
 
-    public function test_signedPayload()
+    public function x_test_signedPayload()
     {
 
         echo "\n\n";
@@ -28,7 +29,7 @@ class AppleJWTTest extends TestCase
         // pass 1
         $appleJWT = file_get_contents(__DIR__ . '/data/signedPayload2.json');
         // echo "---- appleJWT= ". $appleJWT ."\n\n";
-        echo "---- appleJWT  appleJWT is " . Utils::typeof($appleJWT) . "\n\n";
+        echo "---- appleJWT  appleJWT is " . Utils::typeof($appleJWT) . "\n\n"; // string
 
         $key = "c025e2a7b5aa4f12a8b7ec51acdbbd08";
         // $key = "";
@@ -90,19 +91,19 @@ class AppleJWTTest extends TestCase
         $this->assertEquals(TRUE, TRUE);
     }
 
-    public function test_signedPayload_2()
+    public function x_test_signedPayload_2()
     {
         echo "\n\n";;
 
         // pass 1
-        $appleJWT = file_get_contents(__DIR__ . '/data/signedPayload2.json');
-        // echo "---- appleJWT= ". $appleJWT ."\n\n";
+        $appleJWT_string = file_get_contents(__DIR__ . '/data/signedPayload2.json');
+        // echo "---- appleJWT_string= ". $appleJWT_string ."\n\n";
 
         $key = "c025e2a7b5aa4f12a8b7ec51acdbbd08";
         // $key = "";
-        $payload1_stdClass = JWT::decode($appleJWT, new Key($key, 'ES256'));
+        $payload1_stdClass = JWT::decode($appleJWT_string, new Key($key, 'ES256')); // stdClass
 
-        $payload1 = json_encode($payload1_stdClass);
+        $payload1 = json_encode($payload1_stdClass); // string
 
         $payload1_object_vars = get_object_vars($payload1_stdClass);
 
@@ -118,6 +119,8 @@ class AppleJWTTest extends TestCase
 
         //"data":{"bundleId":"com.share-telematics.StickQueue1","bundleVersion":"1","environment":"Sandbox","signedTransactionInfo":
         $data = json_encode(json_decode($payload1)->data);
+
+        $data_stdClass = json_decode($payload1)->data;
 
         //"version":"2.0","signedDate":1674061904484}
 
@@ -139,7 +142,7 @@ class AppleJWTTest extends TestCase
 
         $signedTransactionInfo1_string = json_encode($signedTransactionInfo1_stdClass);
 
-        // ---- appleJWT data signedTransactionInfo1= {"transactionId":"2000000253271855","originalTransactionId":"1000000636285238","webOrderLineItemId":"2000000019030938","bundleId":"com.share-telematics.StickPlan1","productId":"SPLPS_GADZARTS","subscriptionGroupIdentifier":"20605699","purchaseDate":1674061594000,"originalPurchaseDate":1583681241000,"expiresDate":1674061894000,"quantity":1,"type":"Auto-Renewable Subscription","inAppOwnershipType":"PURCHASED","signedDate":1674061904491,"environment":"Sandbox"}
+        // ---- appleJWT_string data signedTransactionInfo1= {"transactionId":"2000000253271855","originalTransactionId":"1000000636285238","webOrderLineItemId":"2000000019030938","bundleId":"com.share-telematics.StickPlan1","productId":"SPLPS_GADZARTS","subscriptionGroupIdentifier":"20605699","purchaseDate":1674061594000,"originalPurchaseDate":1583681241000,"expiresDate":1674061894000,"quantity":1,"type":"Auto-Renewable Subscription","inAppOwnershipType":"PURCHASED","signedDate":1674061904491,"environment":"Sandbox"}
 
         // NOTE:
         // $json_object = json_decode($json_string); // stdClass
@@ -149,17 +152,21 @@ class AppleJWTTest extends TestCase
 
 
 
-        echo "---- appleJWT  appleJWT is " . Utils::typeof($appleJWT) . "\n\n";
-        echo "---- appleJWT  appleJWT is " . Utils::typeof($appleJWT) . "\n\n";
+        echo "---- appleJWT  appleJWT is " . Utils::typeof($appleJWT_string) . "\n\n";
 
-        echo "---- appleJWT  payload1 is " . Utils::typeof($payload1) . "\n\n"; // is stdClass : do json_encode to get string
+        echo "---- appleJWT  payload1_stdClass is " . Utils::typeof($payload1_stdClass) . "\n\n"; // stdClass
+
+        echo "---- appleJWT  payload1 is " . Utils::typeof($payload1) . "\n\n"; // string
 
         echo "---- appleJWT  payload1_object_vars is " . Utils::typeof($payload1_object_vars) . "\n\n";
 
         echo "==== appleJWT  payload1_object_vars keys= " . Utils::toString(array_keys($payload1_object_vars)) . "\n\n";
+        // echo "==== appleJWT  payload1_object_vars values= " . Utils::toString(array_values($payload1_object_vars)) . "\n\n";
 
         #echo "---- appleJWT  payload1= ". $payload1 ."\n\n";
         echo "---- appleJWT  payload1 is " . Utils::typeof($payload1) . "\n\n";
+
+        echo "---- appleJWT  payload1 notificationType= " . $notificationType . "\n\n";
 
         echo "---- appleJWT  payload1 subtype= " . $subtype . "\n\n";
 
@@ -167,6 +174,9 @@ class AppleJWTTest extends TestCase
 
         // echo "---- appleJWT  data= ". $data ."\n\n";
         echo "---- appleJWT  payload1 data is " . Utils::typeof($data) . "\n\n";
+
+        echo "==== appleJWT  payload1 data_stdClass is " . Utils::typeof($data_stdClass) . "\n\n";
+
 
         echo "---- appleJWT  payload1 version= " . $version . "\n\n";
 
@@ -185,11 +195,76 @@ class AppleJWTTest extends TestCase
         echo "---- appleJWT  payload1 data signedTransactionInfo1_string is " . Utils::typeof($signedTransactionInfo1_string) . "\n\n";
 
         echo "---- appleJWT  payload1 data signedTransactionInfo1_object_vars is " . Utils::typeof($signedTransactionInfo1_object_vars) . "\n\n";
-        echo "---- appleJWT  payload1 data signedTransactionInfo1_object_vars= " .  Utils::toString($signedTransactionInfo1_object_vars) . "\n\n";
+        echo "==== appleJWT  payload1 data signedTransactionInfo1_object_vars= " .  Utils::toString($signedTransactionInfo1_object_vars) . "\n\n";
 
         echo "==== appleJWT  payload1 data signedTransactionInfo1_object_vars keys= " . Utils::toString(array_keys($signedTransactionInfo1_object_vars)) . "\n\n";
         echo "==== appleJWT  payload1 data signedTransactionInfo1_object_vars values= " . Utils::toString(array_values($signedTransactionInfo1_object_vars)) . "\n\n";
 
+
+        $this->assertEquals(TRUE, TRUE);
+    }
+
+
+    public function test_signedPayload_final_1()
+    {
+        echo "\ntest_signedPayload_final_1\n";
+
+        // get text from the file
+        $appleJWT_text = file_get_contents(__DIR__ . '/data/signedPayload1.json');
+
+        // create and initialize the converter
+        $converter = new AppleJWT($appleJWT_text);
+
+        // get the signedTransactionInfo properties as string
+        $vars_string = $converter->getSignedTransactionInfoVars_string();        //$this->assertEquals($vars_string, '[transactionId => 2000000252146699, originalTransactionId => 1000000636285238, webOrderLineItemId => 2000000018941206, bundleId => com.share-telematics.StickPlan1, productId => SPLMS, subscriptionGroupIdentifier => 20605699, purchaseDate => 1673965876000, originalPurchaseDate => 1583681241000, expiresDate => 1673966176000, quantity => 1, type => Auto-Renewable Subscription, inAppOwnershipType => PURCHASED, signedDate => 1673965850117, environment => Sandbox]');
+        $this->assertEquals($vars_string, '[transactionId => 2000000251171798, originalTransactionId => 1000000636285238, webOrderLineItemId => 2000000018867885, bundleId => com.share-telematics.StickPlan1, productId => SPLPS, subscriptionGroupIdentifier => 20605699, purchaseDate => 1673880327000, originalPurchaseDate => 1583681241000, expiresDate => 1673880627000, quantity => 1, type => Auto-Renewable Subscription, inAppOwnershipType => PURCHASED, signedDate => 1673880631072, environment => Sandbox]');
+
+        // get the signedTransactionInfo keys as string
+        $vars_string = $converter->getSignedTransactionInfoKeys_string();
+        $this->assertEquals($vars_string, '[transactionId, originalTransactionId, webOrderLineItemId, bundleId, productId, subscriptionGroupIdentifier, purchaseDate, originalPurchaseDate, expiresDate, quantity, type, inAppOwnershipType, signedDate, environment]');
+
+        $this->assertEquals(TRUE, TRUE);
+    }
+
+    public function test_signedPayload_final_2()
+    {
+        echo "\ntest_signedPayload_final_2\n";
+
+        // get text from the file
+        $appleJWT_text = file_get_contents(__DIR__ . '/data/signedPayload2.json');
+
+        // create and initialize the converter
+        $converter = new AppleJWT($appleJWT_text);
+
+        // get the signedTransactionInfo properties as string
+        $vars_string = $converter->getSignedTransactionInfoVars_string();
+        $this->assertEquals($vars_string, '[transactionId => 2000000252146699, originalTransactionId => 1000000636285238, webOrderLineItemId => 2000000018941206, bundleId => com.share-telematics.StickPlan1, productId => SPLMS, subscriptionGroupIdentifier => 20605699, purchaseDate => 1673965876000, originalPurchaseDate => 1583681241000, expiresDate => 1673966176000, quantity => 1, type => Auto-Renewable Subscription, inAppOwnershipType => PURCHASED, signedDate => 1673965850117, environment => Sandbox]');
+
+        // get the signedTransactionInfo keys as string
+        $vars_string = $converter->getSignedTransactionInfoKeys_string();
+        $this->assertEquals($vars_string, '[transactionId, originalTransactionId, webOrderLineItemId, bundleId, productId, subscriptionGroupIdentifier, purchaseDate, originalPurchaseDate, expiresDate, quantity, type, inAppOwnershipType, signedDate, environment]');
+
+        $this->assertEquals(TRUE, TRUE);
+    }
+
+
+    public function test_signedPayload_final_3()
+    {
+        echo "\ntest_signedPayload_final_3\n";
+
+        // get text from the file
+        $appleJWT_text = file_get_contents(__DIR__ . '/data/signedPayload3.json');
+
+        // create and initialize the converter
+        $converter = new AppleJWT($appleJWT_text);
+
+        // get the signedTransactionInfo properties as string
+        $vars_string = $converter->getSignedTransactionInfoVars_string();
+        $this->assertEquals($vars_string, '[transactionId => 2000000253271855, originalTransactionId => 1000000636285238, webOrderLineItemId => 2000000019030938, bundleId => com.share-telematics.StickPlan1, productId => SPLPS_GADZARTS, subscriptionGroupIdentifier => 20605699, purchaseDate => 1674061594000, originalPurchaseDate => 1583681241000, expiresDate => 1674061894000, quantity => 1, type => Auto-Renewable Subscription, inAppOwnershipType => PURCHASED, signedDate => 1674061904491, environment => Sandbox]');
+
+        // get the signedTransactionInfo keys as string
+        $vars_string = $converter->getSignedTransactionInfoKeys_string();
+        $this->assertEquals($vars_string, '[transactionId, originalTransactionId, webOrderLineItemId, bundleId, productId, subscriptionGroupIdentifier, purchaseDate, originalPurchaseDate, expiresDate, quantity, type, inAppOwnershipType, signedDate, environment]');
 
         $this->assertEquals(TRUE, TRUE);
     }

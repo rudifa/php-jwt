@@ -10,18 +10,6 @@ use PHPUnit\Framework\TestCase;
 
 include 'Utils.php';
 
-function typeof($var)
-{
-    if (is_object($var)) {
-        return get_class($var);
-    } else if (is_array($var)) {
-        return 'array of ' . count($var) . ' elements';
-    } else if (is_string($var)) {
-        return 'string of ' . strlen($var) . ' chars';
-    } else {
-        return gettype($var);
-    }
-}
 
 
 class AppleJWTTest extends TestCase
@@ -32,7 +20,7 @@ class AppleJWTTest extends TestCase
         $this->assertEquals(4, 2 * 2);
     }
 
-    public function x_test_signedPayload()
+    public function test_signedPayload()
     {
 
         echo "\n\n";
@@ -40,16 +28,16 @@ class AppleJWTTest extends TestCase
         // pass 1
         $appleJWT = file_get_contents(__DIR__ . '/data/signedPayload2.json');
         // echo "---- appleJWT= ". $appleJWT ."\n\n";
-        echo "---- appleJWT  appleJWT is " . typeof($appleJWT) . "\n\n";
+        echo "---- appleJWT  appleJWT is " . Utils::typeof($appleJWT) . "\n\n";
 
         $key = "c025e2a7b5aa4f12a8b7ec51acdbbd08";
         // $key = "";
         $payload1 = JWT::decode($appleJWT, new Key($key, 'ES256'));
-        echo "---- appleJWT  payload1 is " . typeof($payload1) . "\n\n"; // is stdClass : do json_encode to get string
+        echo "---- appleJWT  payload1 is " . Utils::typeof($payload1) . "\n\n"; // is stdClass : do json_encode to get string
 
         $payload1 = json_encode($payload1);
         #echo "---- appleJWT  payload1= ". $payload1 ."\n\n";
-        echo "---- appleJWT  payload1 is " . typeof($payload1) . "\n\n";
+        echo "---- appleJWT  payload1 is " . Utils::typeof($payload1) . "\n\n";
 
         //{"notificationType":"EXPIRED","subtype":"VOLUNTARY","notificationUUID":"1a9c67f6-d351-46e5-a1c1-c660415f4b09",
 
@@ -65,7 +53,7 @@ class AppleJWTTest extends TestCase
         //"data":{"bundleId":"com.share-telematics.StickQueue1","bundleVersion":"1","environment":"Sandbox","signedTransactionInfo":
         $data = json_encode(json_decode($payload1)->data);
         // echo "---- appleJWT  data= ". $data ."\n\n";
-        echo "---- appleJWT  data is " . typeof($data) . "\n\n";
+        echo "---- appleJWT  data is " . Utils::typeof($data) . "\n\n";
 
         //"version":"2.0","signedDate":1674061904484}
 
@@ -90,15 +78,13 @@ class AppleJWTTest extends TestCase
         #echo "---- appleJWT data signedTransactionInfo= ". $signedTransactionInfo ."\n\n";
 
         $signedTransactionInfo1 = JWT::decode($signedTransactionInfo, new Key($key, 'ES256'));
-        echo "---- appleJWT  signedTransactionInfo1 is " . typeof($signedTransactionInfo1) . "\n\n"; // is stdClass : do json_encode to get string
+        echo "---- appleJWT  signedTransactionInfo1 is " . Utils::typeof($signedTransactionInfo1) . "\n\n"; // is stdClass : do json_encode to get string
 
         $signedTransactionInfo1 = json_encode($signedTransactionInfo1);
         // echo "---- appleJWT data signedTransactionInfo1= ". $signedTransactionInfo1 ."\n\n";
-        echo "---- appleJWT  signedTransactionInfo1 is " . typeof($signedTransactionInfo1) . "\n\n";
+        echo "---- appleJWT  signedTransactionInfo1 is " . Utils::typeof($signedTransactionInfo1) . "\n\n";
 
         // ---- appleJWT data signedTransactionInfo1= {"transactionId":"2000000253271855","originalTransactionId":"1000000636285238","webOrderLineItemId":"2000000019030938","bundleId":"com.share-telematics.StickPlan1","productId":"SPLPS_GADZARTS","subscriptionGroupIdentifier":"20605699","purchaseDate":1674061594000,"originalPurchaseDate":1583681241000,"expiresDate":1674061894000,"quantity":1,"type":"Auto-Renewable Subscription","inAppOwnershipType":"PURCHASED","signedDate":1674061904491,"environment":"Sandbox"}
-
-
 
 
         $this->assertEquals(TRUE, TRUE);
@@ -106,10 +92,7 @@ class AppleJWTTest extends TestCase
 
     public function test_signedPayload_2()
     {
-
-        echo "\n\n";
-
-        $utils = new Utils();
+        echo "\n\n";;
 
         // pass 1
         $appleJWT = file_get_contents(__DIR__ . '/data/signedPayload2.json');
@@ -166,24 +149,24 @@ class AppleJWTTest extends TestCase
 
 
 
-        echo "---- appleJWT  appleJWT is " . typeof($appleJWT) . "\n\n";
-        echo "---- appleJWT  appleJWT is " . $utils->typeof($appleJWT) . "\n\n";
+        echo "---- appleJWT  appleJWT is " . Utils::typeof($appleJWT) . "\n\n";
+        echo "---- appleJWT  appleJWT is " . Utils::typeof($appleJWT) . "\n\n";
 
-        echo "---- appleJWT  payload1 is " . typeof($payload1) . "\n\n"; // is stdClass : do json_encode to get string
+        echo "---- appleJWT  payload1 is " . Utils::typeof($payload1) . "\n\n"; // is stdClass : do json_encode to get string
 
-        echo "---- appleJWT  payload1_object_vars is " . typeof($payload1_object_vars) . "\n\n";
+        echo "---- appleJWT  payload1_object_vars is " . Utils::typeof($payload1_object_vars) . "\n\n";
 
-        echo "==== appleJWT  payload1_object_vars keys= " . $utils->arrayToString(array_keys($payload1_object_vars)) . "\n\n";
+        echo "==== appleJWT  payload1_object_vars keys= " . Utils::toString(array_keys($payload1_object_vars)) . "\n\n";
 
         #echo "---- appleJWT  payload1= ". $payload1 ."\n\n";
-        echo "---- appleJWT  payload1 is " . typeof($payload1) . "\n\n";
+        echo "---- appleJWT  payload1 is " . Utils::typeof($payload1) . "\n\n";
 
         echo "---- appleJWT  payload1 subtype= " . $subtype . "\n\n";
 
         echo "---- appleJWT  payload1 notificationUUID= " . $notificationUUID . "\n\n";
 
         // echo "---- appleJWT  data= ". $data ."\n\n";
-        echo "---- appleJWT  payload1 data is " . typeof($data) . "\n\n";
+        echo "---- appleJWT  payload1 data is " . Utils::typeof($data) . "\n\n";
 
         echo "---- appleJWT  payload1 version= " . $version . "\n\n";
 
@@ -196,16 +179,16 @@ class AppleJWTTest extends TestCase
         echo "---- appleJWT  payload1 data environment= " . $environment . "\n\n";
 
         #echo "---- appleJWT data signedTransactionInfo= ". $signedTransactionInfo ."\n\n";
-        echo "---- appleJWT  payload1 data signedTransactionInfo1_stdClass is " . typeof($signedTransactionInfo1_stdClass) . "\n\n"; // is stdClass : do json_encode to get string
+        echo "---- appleJWT  payload1 data signedTransactionInfo1_stdClass is " . Utils::typeof($signedTransactionInfo1_stdClass) . "\n\n"; // is stdClass : do json_encode to get string
 
         // echo "---- appleJWT data signedTransactionInfo1= ". $signedTransactionInfo1 ."\n\n";
-        echo "---- appleJWT  payload1 data signedTransactionInfo1_string is " . typeof($signedTransactionInfo1_string) . "\n\n";
+        echo "---- appleJWT  payload1 data signedTransactionInfo1_string is " . Utils::typeof($signedTransactionInfo1_string) . "\n\n";
 
-        echo "---- appleJWT  payload1 data signedTransactionInfo1_object_vars is " . typeof($signedTransactionInfo1_object_vars) . "\n\n";
-        echo "---- appleJWT  payload1 data signedTransactionInfo1_object_vars= " .  $utils->assocArrayToString($signedTransactionInfo1_object_vars) . "\n\n";
+        echo "---- appleJWT  payload1 data signedTransactionInfo1_object_vars is " . Utils::typeof($signedTransactionInfo1_object_vars) . "\n\n";
+        echo "---- appleJWT  payload1 data signedTransactionInfo1_object_vars= " .  Utils::toString($signedTransactionInfo1_object_vars) . "\n\n";
 
-        echo "==== appleJWT  payload1 data signedTransactionInfo1_object_vars keys= " . $utils->arrayToString(array_keys($signedTransactionInfo1_object_vars)) . "\n\n";
-        echo "==== appleJWT  payload1 data signedTransactionInfo1_object_vars values= " . $utils->arrayToString(array_values($signedTransactionInfo1_object_vars)) . "\n\n";
+        echo "==== appleJWT  payload1 data signedTransactionInfo1_object_vars keys= " . Utils::toString(array_keys($signedTransactionInfo1_object_vars)) . "\n\n";
+        echo "==== appleJWT  payload1 data signedTransactionInfo1_object_vars values= " . Utils::toString(array_values($signedTransactionInfo1_object_vars)) . "\n\n";
 
 
         $this->assertEquals(TRUE, TRUE);

@@ -3,7 +3,7 @@
 
 class Utils
 {
-    public function typeof($var)
+    public static function typeof($var): string
     {
         if (is_object($var)) {
             return get_class($var);
@@ -20,16 +20,19 @@ class Utils
         }
     }
 
-    function arrayToString($arr)
+    public static function toString($var): string
     {
-        return '[' . join(', ', $arr) . ']';
-    }
-
-    function assocArrayToString($assoc_array)
-    {
-        $string_array = array_map(function ($key, $value) {
-            return "$key => $value";
-        }, array_keys($assoc_array), $assoc_array);
-        return '[' . join(', ', $string_array) . ']';
+        if (is_array($var)) {
+            if (array_keys($var) !== range(0, count($var) - 1)) {
+                $string_array = array_map(function ($key, $value) {
+                    return "$key => $value";
+                }, array_keys($var), $var);
+                return '[' . join(', ', $string_array) . ']';
+            } else {
+                return '[' . join(', ', $var) . ']';
+            }
+        } else {
+            return (string) $var;
+        }
     }
 }

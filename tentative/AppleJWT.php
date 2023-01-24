@@ -7,10 +7,8 @@
  */
 class AppleJWT
 {
-
     public static function decode(string $jwtJson)
     {
-
         // 1. extract the value of the signedPayload key
         $signedPayload = json_decode($jwtJson)->signedPayload;
 

@@ -126,8 +126,6 @@ class JWT
             throw new UnexpectedValueException('Algorithm not supported');
         }
 
-        return $payload; // rudifa skip verification
-
         $key = self::getKey($keyOrKeyArray, property_exists($header, 'kid') ? $header->kid : null);
 
         // Check the algorithm
@@ -494,8 +492,8 @@ class JWT
         ];
         throw new DomainException(
             isset($messages[$errno])
-            ? $messages[$errno]
-            : 'Unknown JSON error: ' . $errno
+                ? $messages[$errno]
+                : 'Unknown JSON error: ' . $errno
         );
     }
 
@@ -542,7 +540,7 @@ class JWT
         return self::encodeDER(
             self::ASN1_SEQUENCE,
             self::encodeDER(self::ASN1_INTEGER, $r) .
-            self::encodeDER(self::ASN1_INTEGER, $s)
+                self::encodeDER(self::ASN1_INTEGER, $s)
         );
     }
 

@@ -9,15 +9,15 @@ namespace Firebase\JWT;
 class AppleJWT
 {
     // string received over the wire
-    private $signedPayloadDict;
+    private string $signedPayloadDict;
 
     // intermediate result 
     private $signedTransactionInfo1_stdClass;
 
     // results of conversion 
-    private $signedTransactionInfo1_object_vars;
-    private $signedTransactionInfo1_object_keys;
-    private $signedTransactionInfo1_object_values;
+    private array $signedTransactionInfo1_object_vars;
+    private array $signedTransactionInfo1_object_keys;
+    private array $signedTransactionInfo1_object_values;
 
     public function __construct(string $signedPayloadDict)
     {
@@ -52,17 +52,17 @@ class AppleJWT
 
     // the API methods
 
-    public function getSignedTransactionInfoVars_string()
+    public function getSignedTransactionInfoVars(): string
     {
         return self::toString($this->signedTransactionInfo1_object_vars);
     }
 
-    public function getSignedTransactionInfoKeys_string()
+    public function getSignedTransactionInfoKeys(): string
     {
         return self::toString($this->signedTransactionInfo1_object_keys);
     }
 
-    public function getSignedTransactionInfoValues_string()
+    public function getSignedTransactionInfoValues(): string
     {
         return self::toString($this->signedTransactionInfo1_object_values);
     }

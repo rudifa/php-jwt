@@ -19,3 +19,7 @@ print_r($keys);
 $values = array_values($result);
 
 print_r($values);
+
+// accepted by the database
+$sql = "INSERT INTO subscriptions (" . implode(", ", $keys) . ") VALUES ('" . implode("', '", $values) . "');";
+echo $sql . "\n";
